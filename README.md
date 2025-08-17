@@ -17,6 +17,6 @@ This repository is built step by step, keeping the README updated after each tas
 
 ### 1. Clone and Install
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/umairaijaz86/privnotecloneServer.git
 cd express-secure-notes
 npm install
