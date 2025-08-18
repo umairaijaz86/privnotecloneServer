@@ -1,6 +1,9 @@
 import express, {Request, Response} from 'express';
 import dotenv from 'dotenv';
 import {connectDb} from './db';
+import notesRouter from './routes/notes';
+import healthRouter from './routes/health';
+
 // Pick up the configs from the .env file
 dotenv.config();
 
@@ -9,15 +12,19 @@ const app = express();
 // Set the port for the server
 const  port = process.env.PORT;
 
-//Connect to DB
-connectDb();
+app.use(express.json());
 
-// Health check endpoint
-app.get('/health', (req: Request, res: Response) => {
-    res.json({ status: 'ok' ,uptime: process.uptime() });
-});
+// API routes
+app.use('/api/notes', notesRouter);
+app.use('/api/health', healthRouter);
 
-// Start the server listening at port
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+async function start(){
+    // Connect to the database
+    await connectDb();
+    // Start the server
+    app.listen(port, () => {
+        console.log(`Server is running on http://localhost:${port}`);
+    });
+};
+
+start();

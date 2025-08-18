@@ -8,8 +8,8 @@ This repository is built step by step, keeping the README updated after each tas
 ## 📌 Current Progress
 - ✅ Task 1: Project bootstrapped with **Express + TypeScript**.
 - ✅ `/health` endpoint returns `{ status: "ok", uptime: number }`.
-- ✅ `.env` support added for configuration (currently `PORT`).
-- ⬜ Task 2: MongoDB connection & Note schema (next).
+- ✅ `.env` support added for configuration.
+- ✅ Task 2: Connected to MongoDB, added `Note` schema with TTL, and implemented `/api/notes` routes.
 
 ---
 
@@ -17,6 +17,6 @@ This repository is built step by step, keeping the README updated after each tas
 
 ### 1. Clone and Install
 ```bash
-git clone https://github.com/umairaijaz86/privnotecloneServer.git
+git clone <your-repo-url>
 cd express-secure-notes
 npm install
