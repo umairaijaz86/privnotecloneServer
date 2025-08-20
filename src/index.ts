@@ -24,8 +24,8 @@ app.get('/docs.json', (_req, res) => res.json(openapiSpec));
 
 
 // API routes
-app.use('/notes', notesRouter);
-app.use('/health', healthRouter);
+app.use('/api/notes', notesRouter);
+app.use('/api/health', healthRouter);
 
 async function start(){
     // Connect to the database

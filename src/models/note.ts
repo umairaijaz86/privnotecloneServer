@@ -3,7 +3,7 @@ import { Interface } from 'readline';
 
 // Notes interface 
 export interface INote extends Document {
-    cipherText: string;
+    message: string;
     iv: string;
     alg: string;
     hasBeenRead: boolean;
@@ -13,7 +13,7 @@ export interface INote extends Document {
 
 // Schema for Notes based on the interface
 const NotesSchema: Schema = new Schema<INote>({
-    cipherText: { type: String, required: true},
+    message: { type: String, required: true},
     iv: { type: String, required: true },
     alg: { type: String, required: true},
     hasBeenRead: { type: Boolean, default: false },

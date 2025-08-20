@@ -4,9 +4,7 @@ import { z } from 'zod';
 
 // DTO for creating a note, with validation. 
 export const noteDto = z.object({
-    cipherText: z.string().min(1, 'Cipher text is required'),
-    iv: z.string().min(1, 'IV is required'),
-    alg: z.string().min(1, 'Algorithm is required'),
+    message: z.string().min(1, 'Cipher text is required'),
     expiresInMinutes: z.number().optional(),
 });
 

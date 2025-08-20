@@ -3,16 +3,19 @@
 import  {Note} from '../models/note';
 import { noteDto } from '../dto/note.dto';
 import { expiresAtFromMinutes } from '../utils/time';
+import { encryptMessage } from '../utils/crypto';
 import dotenv from 'dotenv';
 
 // Create a new note in the database
 export const createNote = async (dto: noteDto) => {
     // Validate the input data
-    const {cipherText, iv, alg, expiresInMinutes = parseInt(process.env.DEFAULT_EXPIRY_MINUTES as string, 10)} = dto;
+    const {message, expiresInMinutes = parseInt(process.env.DEFAULT_EXPIRY_MINUTES as string, 10)} = dto;
+    
+    const { cipherTextB64, ivB64, alg } = encryptMessage(message);
     // create a note
     const note = await Note.create({
-        cipherText,
-        iv,
+        message: cipherTextB64,
+        iv: ivB64,
         alg,
         expiresAt: expiresAtFromMinutes(expiresInMinutes)
     });
