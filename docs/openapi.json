@@ -1,0 +1,141 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "Secure Notes API",
+      "version": "1.0.0",
+      "description": "API for creating and reading one-time, self-destructing notes."
+    },
+    "servers": [
+      { "url": "http://localhost:3000", "description": "Local" }
+    ],
+    "paths": {
+      "/health": {
+        "get": {
+          "summary": "Health check",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": { "type": "string", "example": "ok" },
+                      "uptime": { "type": "number", "example": 12.34 }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/notes": {
+        "post": {
+          "summary": "Create a new encrypted note",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NoteCreateRequest" }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Note successfully created",
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/NoteCreateResponse" }
+                }
+              }
+            },
+            "400": { "$ref": "#/components/responses/BadRequest" },
+            "500": { "$ref": "#/components/responses/ServerError" }
+          }
+        }
+      },
+      "/api/notes/{id}": {
+        "get": {
+          "summary": "Read a note once (self-destructs on read)",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "string" },
+              "description": "The unique note ID"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Note found and returned, then deleted",
+              "content": {
+                "application/json": {
+                  "schema": { "$ref": "#/components/schemas/NoteReadResponse" }
+                }
+              }
+            },
+            "404": { "$ref": "#/components/responses/NotFound" },
+            "500": { "$ref": "#/components/responses/ServerError" }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "NoteCreateRequest": {
+          "type": "object",
+          "required": ["cipherText", "iv", "alg"],
+          "properties": {
+            "cipherText": { "type": "string", "example": "BASE64_CIPHERTEXT" },
+            "iv": { "type": "string", "example": "BASE64_IV" },
+            "alg": { "type": "string", "example": "AES-256-GCM" },
+            "expiresInMinutes": { "type": "integer", "minimum": 1, "example": 60 }
+          }
+        },
+        "NoteCreateResponse": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string", "example": "66c1b2f9e1f5d2abc1234567" },
+            "url": { "type": "string", "example": "http://localhost:3000/n/66c1b2f9e1f5d2abc1234567" }
+          }
+        },
+        "NoteReadResponse": {
+          "type": "object",
+          "properties": {
+            "cipherText": { "type": "string", "example": "BASE64_CIPHERTEXT" },
+            "iv": { "type": "string", "example": "BASE64_IV" },
+            "alg": { "type": "string", "example": "AES-256-GCM" }
+          }
+        },
+        "Error": {
+          "type": "object",
+          "properties": {
+            "error": { "type": "string", "example": "Note not found or already read/expired" }
+          }
+        }
+      },
+      "responses": {
+        "BadRequest": {
+          "description": "Bad request",
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+          }
+        },
+        "NotFound": {
+          "description": "Resource not found",
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+          }
+        },
+        "ServerError": {
+          "description": "Internal server error",
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+          }
+        }
+      }
+    }
+  }
+  

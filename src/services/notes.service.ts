@@ -1,0 +1,27 @@
+//Note Service 
+
+import  {Note} from '../models/note';
+import { noteDto } from '../dto/note.dto';
+import { expiresAtFromMinutes } from '../utils/time';
+import dotenv from 'dotenv';
+
+// Create a new note in the database
+export const createNote = async (dto: noteDto) => {
+    // Validate the input data
+    const {cipherText, iv, alg, expiresInMinutes = parseInt(process.env.DEFAULT_EXPIRY_MINUTES as string, 10)} = dto;
+    // create a note
+    const note = await Note.create({
+        cipherText,
+        iv,
+        alg,
+        expiresAt: expiresAtFromMinutes(expiresInMinutes)
+    });
+    //return back the note
+    return note;
+};
+
+// Read a note once and delete it from the database
+export const readNoteOnce = async (id: string) => { 
+    return Note.findOneAndDelete({_id: id});
+};
+
