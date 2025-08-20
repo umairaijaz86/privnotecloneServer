@@ -86,11 +86,9 @@
       "schemas": {
         "NoteCreateRequest": {
           "type": "object",
-          "required": ["cipherText", "iv", "alg"],
+          "required": ["cipherText"],
           "properties": {
-            "cipherText": { "type": "string", "example": "BASE64_CIPHERTEXT" },
-            "iv": { "type": "string", "example": "BASE64_IV" },
-            "alg": { "type": "string", "example": "AES-256-GCM" },
+            "message": { "type": "string", "example": "Example string" },
             "expiresInMinutes": { "type": "integer", "minimum": 1, "example": 60 }
           }
         },
@@ -104,9 +102,7 @@
         "NoteReadResponse": {
           "type": "object",
           "properties": {
-            "cipherText": { "type": "string", "example": "BASE64_CIPHERTEXT" },
-            "iv": { "type": "string", "example": "BASE64_IV" },
-            "alg": { "type": "string", "example": "AES-256-GCM" }
+            "message": { "type": "string", "example": "Example string" }
           }
         },
         "Error": {
