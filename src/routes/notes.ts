@@ -11,7 +11,7 @@ router.post('/', validate(noteDto), async (req: Request, res: Response) => {
         
         const note = await createNote(req.body);
 
-        const host = req.headers["x-forwaded-host"] || req.headers.host || `localhost:${process.env.PORT || 3000}`;
+        const host = req.headers["x-forwaded-host"] || req.headers.host || `localhost:${process.env.PORT }`;
         const proto = (req.headers["x-forwarded-proto"] || req.protocol ) as string || 'http';
 
         return res.status(201).json({ id:note.id, url: `${proto}://${host}/notes/${note.id.toString()}`});
