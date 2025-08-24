@@ -21,8 +21,8 @@ app.use(express.json());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec));
 app.get('/docs.json', (_req, res) => res.json(openapiSpec));
 app.use(cors({
-    origin: '*', // Allow all origins for simplicity, adjust as needed
-    methods: ['GET', 'POST'], // Specify allowed methods
+    origin: '*', // Allow all origins
+    methods: ['GET', 'POST'], // allowed methods
 }));
 
 // API routes
