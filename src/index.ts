@@ -6,7 +6,7 @@ import healthRouter from './routes/health';
 import swaggerUi from 'swagger-ui-express';
 import fs from 'fs';
 import path from 'path';
-
+import cors from 'cors';
 // Pick up the configs from the .env file
 dotenv.config();
 
@@ -18,10 +18,12 @@ const openapiPath = path.resolve(process.cwd(), 'docs/openapi.json');
 const openapiSpec = JSON.parse(fs.readFileSync(openapiPath, 'utf8'));
 
 app.use(express.json());
-
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec));
 app.get('/docs.json', (_req, res) => res.json(openapiSpec));
-
+app.use(cors({
+    origin: '*', // Allow all origins for simplicity, adjust as needed
+    methods: ['GET', 'POST'], // Specify allowed methods
+}));
 
 // API routes
 app.use('/api/notes', notesRouter);
