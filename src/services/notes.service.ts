@@ -10,7 +10,7 @@ import dotenv from 'dotenv';
 export const createNote = async (dto: noteDto) => {
     // Validate the input data
     const {message, expiresInMinutes = parseInt(process.env.DEFAULT_EXPIRY_MINUTES as string, 10)} = dto;
-    
+    //Encrypt the message before saving it
     const { cipherTextB64, ivB64, alg } = encryptMessage(message);
     // create a note
     const note = await Note.create({
@@ -25,6 +25,7 @@ export const createNote = async (dto: noteDto) => {
 
 // Read a note once and delete it from the database
 export const readNoteOnce = async (id: string) => { 
+    //
     return Note.findOneAndDelete({_id: id});
 };
 

@@ -13,6 +13,7 @@ if (!keyB64) {
 
 const key = Buffer.from(keyB64, 'base64');
 
+// function to encrypt plain text and return the encrypted version with iv and algorithm used
 export function encryptMessage(plaintext: string) {
     const iv = crypto.randomBytes(12); // 96 bits for GCM
     const cipher = crypto.createCipheriv(NODE_ALG, key, iv);
@@ -28,10 +29,13 @@ export function encryptMessage(plaintext: string) {
     };
 }
 
+// function to decrypt the message using the cipherText and iv
 export function decryptMessage(cipherTextB64: string, ivB64: string) {
     const buf = Buffer.from(cipherTextB64, 'base64');
-    const tag = buf.subarray(buf.length - 16); // Last 16 bytes are the tag
-    const data = buf.subarray(0, buf.length - 16); // Everything before the tag is the ciphertext
+    // Last 16 bytes are the tag
+    const tag = buf.subarray(buf.length - 16); 
+    // Everything before the tag is the ciphertext
+    const data = buf.subarray(0, buf.length - 16); 
     const iv = Buffer.from(ivB64, 'base64');
 
     const decipher = crypto.createDecipheriv(NODE_ALG, key, iv);
