@@ -11,8 +11,29 @@ A simple project inspired by PrivNote to share secure, self-destructing notes.
   - 404 (Note not found / expired)
   - 400 (bad request)
 ---
-## 📔 Data Model
+## 🏗️Structure
+
+```bash
+privnotecloneServer/
+├─ docs/                            # Open api documentation    
+├─ src/
+│  ├─ dto/note.dto.ts               # DTO 
+│  ├─ middleware/validate.ts        # middleware for Scheme validation 
+│  ├─ models/Note.ts                # mongoose schema
+│  ├─ routes/(notes.ts, health.ts)  # POST and GET routes
+│  ├─ services/notes.service.ts     # Create note and read once
+│  ├─ utils/ (crypto.ts, time.ts)   # encrypt, decrypt, TTL logic
+│  ├─ db.ts                         # Database connectivity
+│  ├─ index.ts                      # app bootstrap
+│  └─ config/                       # env, logger, cors, security headers
+├─ tests/
+├─ tsconfig.json
+├─ package.json
+└─ Dockerfile
 ```
+---
+## 📔 Data Model
+```js
 {
   _id: string,
   message: string,
@@ -36,7 +57,30 @@ _Indexes: TTL on ```expiresAt```_
   - If missing or expired, it returns a 404 to prevent from disclosing if a note ever existed or not
 
 ---
+## 🌐Build and Serve
+In Docker, the app is built node and express
+
+From inside privnotecloneServer folder:
+
+```bash
+# build image, tag it "privnote-api"
+docker build -t privnote-api .
+```
+
+Run it:
+
+```bash
+docker run -p 3000:3000 \
+  -e PORT=3000 \
+  -e MONGO_URI="mongodb://host.docker.internal:27017/privnote" \
+  -e SECRET_KEY_BASE64="$(openssl rand -base64 32)" \
+  -e DEFAULT_EXPIRY_MINUTES=60 \
+  privnote-api
+```
+
+---
 ## ⚙️Technical Notes
+**🧱 Stack:** Node.js + Express + Typescript + MongoDB
 **🔒 Cryptography:** NODE ```crypto``` AES-256-GCM
 **📔 Database:** MongoDB via Mongoose
 **⚙️ Config:** ```.env``` with 
