@@ -37,7 +37,7 @@ router.get('/:id', async (req: Request, res: Response) => {
         const plainText = decryptMessage(note.message, note.iv);
 
         return res.json({
-            cipherText: plainText
+            message: plainText
         });
 
     } catch (e){
